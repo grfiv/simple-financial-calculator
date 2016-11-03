@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+    <meta name="viewport" content="user-scalable=no,width=device-width,initial-scale=1.0,maximum-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="images/icon.png"> <!-- icon.png 57x57; icon@2x.png 114x114-->
+
+    <!--                                                 -->
+    <!-- Mobile application to calculate                 -->
+    <!-- basic finance functions                         -->
+    <!--                                                 -->
+    <!-- George Fisher                                   -->
+    <!-- https://github.com/grfiv/hp12c                  -->
+    <!--                                                 -->
+    <title>Basic Finance</title>
+
+    <!-- jQuery -->
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+    <!-- Twitter Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+   <style>
+        /**
+         * minor tweaks
+         */
+        dt {
+            font-weight: bold;
+        }
+        dd {
+            text-indent: 30px;
+            margin-bottom: 10px;
+        }
+    </style>
+
+
+</head>
+<body onload="setTimeout(function() { window.scrollTo(0, 1) }, 100);">
+<div class="container">
+<!--           -->
+<!-- Main Page -->
+<!--           -->
+<section id="main-page">
+
+    <header class="page-header" style="margin:0;padding:0;">
+        <p style="text-align: center;font-weight: bold;">Basic Finance</p>
+    </header>
+
+    <main>
+
+            <!-- input fields -->
+            <div class="form-group col-xs-12">
+                <button class="btn btn-default" id="n-btn" tabindex="-1">
+                    <img src="images/n.png"  />
+                </button>
+                <input type="number" name="n" id="n" value="" min="1"
+                       placeholder="Number of periods">
+            </div>
+            <div class="form-group col-xs-12">
+                <button class="btn btn-default"  id="i-btn" tabindex="-1">
+                    <img src="images/i.png"  />
+                </button>
+                <input type="number" name="i" id="i" value="" min="1" 
+                       placeholder="Interest Rate">
+            </div>
+            <div class="form-group col-xs-12">
+                <button class="btn btn-default" id="pv-btn" tabindex="-1">
+                    <img src="images/PV.png"  />
+                </button>
+                <input type="number" name="pv" id="pv" value=""
+                       placeholder="Present Value">
+                <span id="pv_explain" style="display:none;"></span>
+            </div>
+            <div class="form-group col-xs-12">
+                <button class="btn btn-default" id="pmt-btn" tabindex="-1">
+                    <img src="images/PMT.png"  />
+                </button>
+                <input type="number" name="pmt" id="pmt" value=""
+                       placeholder="Payment Per Period">
+                <span id="pmt_explain" style="display:none;"></span>
+            </div>
+            <div class="form-group col-xs-12">
+                <button class="btn btn-default" id="fv-btn" tabindex="-1">
+                    <img src="images/FV.png"  />
+                </button>
+                <input type="number" name="fv" id="fv" value=""
+                       placeholder="Future Value">
+                <span id="fv_explain" style="display:none;"></span>
+            </div>
+
+            <!-- buttons -->
+
+            <div class="form-group  col-xs-12">
+
+                    <input type="button" id="help-btn"  value="Help" tabindex="-1">
+                    <input type="button" id="reset-btn" value="Reset" tabindex="-1">
+
+            </div>
+
+    </main>
+
+    <p id="err_msg" style="color:red;display:none;">HHHHHHHHHHHHHHHHHHHHHHHHH</p>
+
+</section>
+
+<!--           -->
+<!-- Help Page -->
+<!--           -->
+<section data-role="page" id="help-page" style="display: none;">
+
+    <header class="page-header">
+        <button type="button" class="return-btn btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-arrow-right"></span> Return
+        </button>
+    </header>
+
+    <main>
+        <p>A very basic financial calculator: fill in some of the fields and press the icon on the field to be derived.</p>
+        <dl>
+            <dt><img src="images/n.png"  /> Number of periods</dt>
+            <dd>"Periods" can be years or months; if months, the annual interest must be divided by 12</dd>
+            <dt><img src="images/i.png"  /> Interest</dt>
+            <dd>The interest rate as a number (5.2 for 5.2%)</dd>
+            <dt><img src="images/PV.png"  /> Interest</dt>
+            <dd>The Present Value; what you have today</dd>
+            <dt><img src="images/PMT.png"  /> Payment Per Period</dt>
+            <dd>(optional) Any regular payment that is made each period</dd>
+            <dt><img src="images/FV.png"  /> Future Value</dt>
+            <dd>The value after compounding in the future</dd>
+        </dl>
+
+    </main>
+
+    <footer class="page-header">
+        <button type="button" class="return-btn btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-arrow-right"></span> Return
+        </button>
+    </footer>
+
+</section>
+
+</div> <!-- class="container" -->
+
+<!--                                       -->
+<!-- code driving the calculations follows -->
+<!--                                       -->
+
+<script>
+
+</script>
+
+<script>
+    /**
+     * Financial Formulas
+     *
+     * citation
+     * http://www.getobjects.com/Components/Finance/TVM/formulas.html
+     */
+    function FV(PV, PMT, i, n, type) {
+        var _i = i / 100;
+
+        var k = 1;
+        if (type == 'end') k = 1 + _i;
+
+        var lhs = (PMT * k) / _i;
+        var mid = Math.pow(1 + _i, n);
+        var rhs = PV + lhs;
+
+        return lhs - mid * rhs;
+    }
+    function PV(FV, PMT, i, n, type) {
+        var _i = i / 100;
+
+        var k = 1;
+        if (type == 'end') k = 1 + _i;
+
+        var pmt = (PMT * k) / _i;
+        var mid = 1 / Math.pow(1+_i, n);
+        return (pmt - FV) * mid -pmt;
+    }
+    function PMT(i, n, PV, FV, type) {
+        var _i = i / 100;
+
+        var k = 1;
+        if (type == 'end') k = 1 + _i;
+
+        var PVplusFV   = PV + FV;
+        var denom      = Math.pow(1+_i,n) - 1;
+        var frac       = PVplusFV / denom;
+        var PVplusFrac = PV + frac;
+        var result     = PVplusFrac * (-_i / k);
+
+        return result;
+    }
+    function N(i, PMT, PV, FV)
+    {
+        var _i = i / 100;
+        var n;
+        if ( _i == 0 )
+        {
+            n = - (FV + PV)/PMT;
+        }
+        else
+        {
+            n = Math.log((-FV * _i + PMT)/(PMT + _i * PV))/ Math.log(1 + _i);
+        }
+
+        return n;
+    }
+
+
+    /* ================================================== */
+
+    // Return button displays main-page
+    $('.return-btn').click(function() {
+        $('#main-page').show();
+        $('#help-page').hide();
+        $('#err_msg').hide();
+    });
+
+    // Help button displays help-page
+    $('#help-btn').click(function() {
+        $('#main-page').hide();
+        $('#help-page').show();
+        $('#err_msg').hide();
+    });
+
+    // Reset button refreshes the whole package from the server ()
+    $('#reset-btn').click(function() {
+        $('#main-page').show();
+        $('#help-page').hide();
+        $('#err_msg').hide();
+        location.reload();
+    });
+
+    /* ================================================== */
+
+    function resetColors() {
+        $('#n').css('color', 'black');
+        $('#i').css('color', 'black');
+        $('#pv').css('color', 'black');
+        $('#pmt').css('color', 'black');
+        $('#fv').css('color', 'black');
+        $('#err_msg').hide();
+    }
+
+    function loadButtonVars() {
+        var n = parseInt(document.getElementById('n').value);
+        var i = parseFloat(document.getElementById('i').value);
+        var PV = parseFloat(document.getElementById('pv').value);
+        var PMT = parseFloat(document.getElementById('pmt').value);
+        var FV = parseFloat(document.getElementById('fv').value);
+
+        if (!PMT) PMT = 0;
+        // var n   = vars[0];
+        // var i   = vars[1];
+        // var PV  = vars[2];
+        // var PMT = vars[3];
+        // var FV  = vars[4];
+
+        return [n, i, PV, PMT, FV];
+    }
+
+    function explain(PV, FV, PMT) {
+        if (PV < 0) {
+            $('#pv_explain').text("withdrawal");
+            $('#pv_explain').show();
+        } else if (PV > 0) {
+            $('#pv_explain').text("deposit");
+            $('#pv_explain').show();
+        } else {
+            $('#pv_explain').hide();
+        }
+        if (FV < 0) {
+            $('#fv_explain').text("withdrawal");
+            $('#fv_explain').show();
+        } else if (FV > 0) {
+            $('#fv_explain').text("deposit");
+            $('#fv_explain').show();
+        } else {
+            $('#fv_explain').hide();
+        }
+        if (PMT < 0) {
+            $('#pmt_explain').text("withdrawal");
+            $('#pmt_explain').show();
+        } else if (PMT > 0) {
+            $('#pmt_explain').text("deposit");
+            $('#pmt_explain').show();
+        } else {
+            $('#pmt_explain').hide();
+        }
+    }
+
+    /* ================================================== */
+
+    $("#n-btn").click(function () {
+        resetColors();
+        var vars = loadButtonVars();
+        var i   = vars[1];
+        var PV  = vars[2];
+        var PMT = vars[3];
+        var FV  = vars[4];
+
+        if (!i || !PV || !FV) {
+            $('#err_msg').text("i, PV and FV must all be set for n");
+            $('#err_msg').show()
+        } else {
+            var n =  N(i, PMT, PV, FV);
+            $('#n').val(Math.round(n * 100) / 100);
+            $('#n').css('color', 'red');
+        }
+    });
+
+    $("#i-btn").click(function () {
+        resetColors();
+        var vars = loadButtonVars();
+        var n   = vars[0];
+        var PV  = vars[2];
+        var PMT = vars[3];
+        var FV  = vars[4];
+        alert("The RATE function has not been implemented yet");
+    });
+
+    $("#pv-btn").click(function () {
+        resetColors();
+        var vars = loadButtonVars();
+        var n = vars[0];
+        var i = vars[1];
+        var PMT = vars[3];
+        var FV = vars[4];
+
+        if (!n || !i || !FV) {
+            $('#err_msg').text("n, i and FV must all be set for PV");
+            $('#err_msg').show()
+        } else {
+            var pv =  PV(FV, PMT, i, n, 'end');
+            $('#pv').val(Math.round(pv * 100) / 100);
+            $('#pv').css('color', 'red');
+        }
+        explain(pv, FV, PMT);
+    });
+
+    $("#pmt-btn").click(function () {
+        resetColors();
+        var vars = loadButtonVars();
+        var n   = vars[0];
+        var i   = vars[1];
+        var PV  = vars[2];
+        var FV  = vars[4];
+
+        if (!n || !i || !FV || !PV) {
+            $('#err_msg').text("n, i, PV and FV must all be set for PMT");
+            $('#err_msg').show()
+        } else {
+            var pmt = PMT(i, n, PV, FV, 'end');
+            //var $pmt = PMT (i, 1, n, PV, FV);
+            $('#pmt').val(Math.round(pmt * 100) / 100);
+            $('#pmt').css('color', 'red');
+        }
+        explain(PV, FV, pmt);
+
+    });
+    $("#fv-btn").click(function () {
+        resetColors();
+        var vars = loadButtonVars();
+        var n = vars[0];
+        var i = vars[1];
+        var PV = vars[2];
+        var PMT = vars[3];
+
+        if (!n || !i || !PV) {
+           $('#err_msg').text("n, i and PV must all be set for FV");
+           $('#err_msg').show();
+        } else {
+            var fv = FV(PV, PMT, i, n, 'end');
+            $('#fv').val(Math.round(fv * 100) / 100);
+            $('#fv').css('color', 'red');
+        }
+        explain(PV, fv, PMT);
+    });
+</script>
+
+</body>
+</html>
