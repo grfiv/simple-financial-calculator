@@ -125,16 +125,19 @@
         <p>A very basic financial calculator: fill in some of the fields and press the icon on the field to be derived.</p>
         <dl>
             <dt><img src="images/n.png"  /> Number of years</dt>
-            <dd>Press the "months" or "quarters" links to change both "n" and "i" to monthly or quarterly</dd>
+            <dd>Press the "months" or "quarters" links to change "n", "i" (optionally "PMT") to monthly or quarterly</dd>
             <dt><img src="images/i.png"  /> Annual Interest</dt>
             <dd>The annual interest rate as a number (5.2 for 5.2%)
-            <br>
+                <br>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                Press the "months" or "quarters" links to change both "n" and "i" to monthly or quarterly</dd>
+                Press the "months" or "quarters" links to change "n", "i" (optionally "PMT") to monthly or quarterly</dd>
             <dt><img src="images/PV.png"  /> Interest</dt>
             <dd>The Present Value; what you have today</dd>
             <dt><img src="images/PMT.png"  /> Payment Per Period</dt>
-            <dd>(optional) Any regular payment that is made each period</dd>
+            <dd>(optional) Any regular payment that is made each period
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Press the "months" or "quarters" links to change "n", "i" and "PMT" to monthly or quarterly</dd>
             <dt><img src="images/FV.png"  /> Future Value</dt>
             <dd>The value after compounding in the future</dd>
         </dl>
@@ -202,16 +205,12 @@
 
         return result;
     }
-    function N(i, PMT, PV, FV)
-    {
+    function N(i, PMT, PV, FV) {
         var _i = i / 100;
         var n;
-        if ( _i == 0 )
-        {
+        if ( _i == 0 ) {
             n = - (FV + PV)/PMT;
-        }
-        else
-        {
+        } else {
             n = Math.log((-FV * _i + PMT)/(PMT + _i * PV))/ Math.log(1 + _i);
         }
 
@@ -255,13 +254,14 @@
     }
 
     function loadButtonVars() {
-        var n = parseInt(document.getElementById('n').value);
+        var n = parseFloat(document.getElementById('n').value);
         var i = parseFloat(document.getElementById('i').value);
         var PV = parseFloat(document.getElementById('pv').value);
         var PMT = parseFloat(document.getElementById('pmt').value);
         var FV = parseFloat(document.getElementById('fv').value);
 
         if (!PMT) PMT = 0;
+        // var vars = loadButtonVars();
         // var n   = vars[0];
         // var i   = vars[1];
         // var PV  = vars[2];
@@ -305,9 +305,11 @@
         var vars = loadButtonVars();
         var n   = vars[0];
         var i   = vars[1];
+        var PMT = vars[3];
         if (i && n) {
             $('#i').val(i/12);
             $('#n').val(n*12);
+            if (PMT > 0) $('#pmt').val(i/12);
             $('#err_msg').hide()
         } else if (!n) {
             $('#err_msg').text("n not set");
@@ -322,9 +324,11 @@
         var vars = loadButtonVars();
         var n   = vars[0];
         var i   = vars[1];
+        var PMT = vars[3];
         if (i && n) {
             $('#i').val(i/4);
             $('#n').val(n*4);
+            if (PMT > 0) $('#pmt').val(i/4);
             $('#err_msg').hide()
         } else if (!n) {
             $('#err_msg').text("n not set");
