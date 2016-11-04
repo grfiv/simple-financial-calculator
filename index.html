@@ -172,8 +172,8 @@
     function FV(PV, PMT, i, n, type) {
         var _i = i / 100;
 
-        var k = 1;
-        if (type == 'end') k = 1 + _i;
+        var k = 1; /* 'end' */
+        if (type == 'beg') k = 1 + _i;
 
         var lhs = (PMT * k) / _i;
         var mid = Math.pow(1 + _i, n);
@@ -184,8 +184,8 @@
     function PV(FV, PMT, i, n, type) {
         var _i = i / 100;
 
-        var k = 1;
-        if (type == 'end') k = 1 + _i;
+        var k = 1;  /* 'end' */
+        if (type == 'beg') k = 1 + _i;
 
         var pmt = (PMT * k) / _i;
         var mid = 1 / Math.pow(1+_i, n);
@@ -194,8 +194,8 @@
     function PMT(i, n, PV, FV, type) {
         var _i = i / 100;
 
-        var k = 1;
-        if (type == 'end') k = 1 + _i;
+        var k = 1;  /* 'end' */
+        if (type == 'beg') k = 1 + _i;
 
         var PVplusFV   = PV + FV;
         var denom      = Math.pow(1+_i,n) - 1;
@@ -215,6 +215,15 @@
         }
 
         return n;
+    }
+    function RATE(n, PV, FV, PMT) {
+        if (PMT > 0) {
+            alert("RATE with PMT not implemented yet");
+            return NaN;
+        } else {
+            var log = (Math.log(Math.abs(PV)) - Math.log(Math.abs(FV))) / n;
+            return -100 * (Math.exp(log) - 1);
+        }
     }
 
 
@@ -241,6 +250,24 @@
         $('#err_msg').hide();
         location.reload();
     });
+
+    /* ================================================== */
+
+    var roundedType = 1; /* default for rounded function */
+
+    function rounded (num, type) {
+        /* type = 0 => don't round
+        *  defaults to 1           */
+        type = (typeof type !== 'undefined') ?  type : 1;
+        if (type == 0) return num;
+
+        var dec = 1000000;
+        return Math.round(num * dec) / dec;
+    }
+
+    function isNumeric(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+    }
 
     /* ================================================== */
 
@@ -340,7 +367,6 @@
 
     });
 
-
     /* ================================================== */
 
     $("#n-btn").click(function () {
@@ -356,7 +382,7 @@
             $('#err_msg').show()
         } else {
             var n =  N(i, PMT, PV, FV);
-            $('#n').val(Math.round(n * 100) / 100);
+            $('#n').val(rounded(n, roundedType));
             $('#n').css('color', 'red');
         }
     });
@@ -368,7 +394,18 @@
         var PV  = vars[2];
         var PMT = vars[3];
         var FV  = vars[4];
-        alert("The RATE function has not been implemented yet");
+
+        if (!n || !PV || !FV) {
+            $('#err_msg').text("n, PV, FV must all be set for i");
+            $('#err_msg').show()
+        } else {
+            var i = RATE(n, PV, FV, PMT);
+            if (isNumeric(i)) {
+                $('#i').val(rounded(i, roundedType));
+                $('#i').css('color', 'red');
+            }
+        }
+
     });
 
     $("#pv-btn").click(function () {
@@ -384,7 +421,7 @@
             $('#err_msg').show()
         } else {
             var pv =  PV(FV, PMT, i, n, 'end');
-            $('#pv').val(Math.round(pv * 100) / 100);
+            $('#pv').val(rounded(pv, roundedType));
             $('#pv').css('color', 'red');
         }
         explain(pv, FV, PMT);
@@ -404,7 +441,7 @@
         } else {
             var pmt = PMT(i, n, PV, FV, 'end');
             //var $pmt = PMT (i, 1, n, PV, FV);
-            $('#pmt').val(Math.round(pmt * 100) / 100);
+            $('#pmt').val(rounded(pmt, roundedType));
             $('#pmt').css('color', 'red');
         }
         explain(PV, FV, pmt);
@@ -423,7 +460,7 @@
            $('#err_msg').show();
         } else {
             var fv = FV(PV, PMT, i, n, 'end');
-            $('#fv').val(Math.round(fv * 100) / 100);
+            $('#fv').val(rounded(fv, roundedType));
             $('#fv').css('color', 'red');
         }
         explain(PV, fv, PMT);
