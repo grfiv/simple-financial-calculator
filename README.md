@@ -5,6 +5,5 @@
     * HTML5, CSS3, javascript
     * jQuery
     * Twitter Bootstrap
-    * jQuery Template
     * several javascript financial functions of my own
 
