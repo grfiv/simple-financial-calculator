@@ -57,14 +57,18 @@
                     <img src="images/n.png"  />
                 </button>
                 <input type="number" name="n" id="n" value="" min="1"
-                       placeholder="Number of periods">
+                       placeholder="Number of years">
+                &nbsp;
+                <a href="#" id="months" tabindex="-1">months</a>
+                &nbsp;
+                <a href="#" id="quarters" tabindex="-1">quarters</a>
             </div>
             <div class="form-group col-xs-12">
                 <button class="btn btn-default"  id="i-btn" tabindex="-1">
                     <img src="images/i.png"  />
                 </button>
-                <input type="number" name="i" id="i" value="" min="1" 
-                       placeholder="Interest Rate">
+                <input type="number" name="i" id="i" value="" min="1"
+                       placeholder="Annual Interest Rate">
             </div>
             <div class="form-group col-xs-12">
                 <button class="btn btn-default" id="pv-btn" tabindex="-1">
@@ -120,10 +124,13 @@
     <main>
         <p>A very basic financial calculator: fill in some of the fields and press the icon on the field to be derived.</p>
         <dl>
-            <dt><img src="images/n.png"  /> Number of periods</dt>
-            <dd>"Periods" can be years or months; if months, the annual interest must be divided by 12</dd>
-            <dt><img src="images/i.png"  /> Interest</dt>
-            <dd>The interest rate as a number (5.2 for 5.2%)</dd>
+            <dt><img src="images/n.png"  /> Number of years</dt>
+            <dd>Press the "months" or "quarters" links to change both "n" and "i" to monthly or quarterly</dd>
+            <dt><img src="images/i.png"  /> Annual Interest</dt>
+            <dd>The annual interest rate as a number (5.2 for 5.2%)
+            <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Press the "months" or "quarters" links to change both "n" and "i" to monthly or quarterly</dd>
             <dt><img src="images/PV.png"  /> Interest</dt>
             <dd>The Present Value; what you have today</dd>
             <dt><img src="images/PMT.png"  /> Payment Per Period</dt>
@@ -293,6 +300,42 @@
             $('#pmt_explain').hide();
         }
     }
+
+    $('#months').click(function () {
+        var vars = loadButtonVars();
+        var n   = vars[0];
+        var i   = vars[1];
+        if (i && n) {
+            $('#i').val(i/12);
+            $('#n').val(n*12);
+            $('#err_msg').hide()
+        } else if (!n) {
+            $('#err_msg').text("n not set");
+            $('#err_msg').show()
+        } else {
+            $('#err_msg').text("i not set");
+            $('#err_msg').show()
+        }
+
+    });
+    $('#quarters').click(function () {
+        var vars = loadButtonVars();
+        var n   = vars[0];
+        var i   = vars[1];
+        if (i && n) {
+            $('#i').val(i/4);
+            $('#n').val(n*4);
+            $('#err_msg').hide()
+        } else if (!n) {
+            $('#err_msg').text("n not set");
+            $('#err_msg').show()
+        } else {
+            $('#err_msg').text("i not set");
+            $('#err_msg').show()
+        }
+
+    });
+
 
     /* ================================================== */
 
