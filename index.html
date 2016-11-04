@@ -16,6 +16,12 @@
     <!--                                                 -->
     <title>Basic Finance</title>
 
+    <!--                                                 -->
+    <!-- Page display controlled by                      -->
+    <!--   $('#...').show();                             -->
+    <!--   $('#...').hide();                             -->
+    <!--                                                 -->
+
     <!-- jQuery -->
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
@@ -36,139 +42,130 @@
         }
     </style>
 
-
 </head>
+
 <body onload="setTimeout(function() { window.scrollTo(0, 1) }, 100);">
-<div class="container">
-<!--           -->
-<!-- Main Page -->
-<!--           -->
-<section id="main-page">
+    <div class="container">
+        <!--           -->
+        <!-- Main Page -->
+        <!--           -->
+        <section id="main-page">
 
-    <header class="page-header" style="margin:0;padding:0;">
-        <p style="text-align: center;font-weight: bold;">Basic Finance</p>
-    </header>
+            <header class="page-header" style="margin:0;padding:0;">
+                <p style="text-align: center;font-weight: bold;">Basic Finance</p>
+            </header>
 
-    <main>
+            <main>
+                <!-- input fields -->
+                <div class="form-group col-xs-12">
+                    <button class="btn btn-default" id="n-btn" tabindex="-1">
+                        <img src="images/n.png"  />
+                    </button>
+                    <input type="number" name="n" id="n" value="" min="1"
+                           placeholder="Number of years">
+                    &nbsp;
+                    <a href="#" id="months" tabindex="-1">months</a>
+                    &nbsp;
+                    <a href="#" id="quarters" tabindex="-1">quarters</a>
+                </div>
+                <div class="form-group col-xs-12">
+                    <button class="btn btn-default"  id="i-btn" tabindex="-1">
+                        <img src="images/i.png"  />
+                    </button>
+                    <input type="number" name="i" id="i" value="" min="1"
+                           placeholder="Annual Interest Rate">
+                </div>
+                <div class="form-group col-xs-12">
+                    <button class="btn btn-default" id="pv-btn" tabindex="-1">
+                        <img src="images/PV.png"  />
+                    </button>
+                    <input type="number" name="pv" id="pv" value=""
+                           placeholder="Present Value">
+                    <span id="pv_explain" style="display:none;"></span>
+                </div>
+                <div class="form-group col-xs-12">
+                    <button class="btn btn-default" id="pmt-btn" tabindex="-1">
+                        <img src="images/PMT.png"  />
+                    </button>
+                    <input type="number" name="pmt" id="pmt" value=""
+                           placeholder="Payment Per Period">
+                    <span id="pmt_explain" style="display:none;"></span>
+                </div>
+                <div class="form-group col-xs-12">
+                    <button class="btn btn-default" id="fv-btn" tabindex="-1">
+                        <img src="images/FV.png"  />
+                    </button>
+                    <input type="number" name="fv" id="fv" value=""
+                           placeholder="Future Value">
+                    <span id="fv_explain" style="display:none;"></span>
+                </div>
 
-            <!-- input fields -->
-            <div class="form-group col-xs-12">
-                <button class="btn btn-default" id="n-btn" tabindex="-1">
-                    <img src="images/n.png"  />
+                <!-- buttons -->
+                <div class="form-group  col-xs-12">
+                        <input type="button" id="help-btn"  value="Help" tabindex="-1">
+                        <input type="button" id="reset-btn" value="Reset" tabindex="-1">
+                </div>
+            </main>
+
+            <p id="err_msg" style="color:red;display:none;"></p> <!-- displayed in case of error -->
+
+        </section>
+
+        <!--           -->
+        <!-- Help Page -->
+        <!--           -->
+        <section id="help-page" style="display: none;">
+
+            <header class="page-header">
+                <button type="button" class="return-btn btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-arrow-right"></span> Return
                 </button>
-                <input type="number" name="n" id="n" value="" min="1"
-                       placeholder="Number of years">
-                &nbsp;
-                <a href="#" id="months" tabindex="-1">months</a>
-                &nbsp;
-                <a href="#" id="quarters" tabindex="-1">quarters</a>
-            </div>
-            <div class="form-group col-xs-12">
-                <button class="btn btn-default"  id="i-btn" tabindex="-1">
-                    <img src="images/i.png"  />
+            </header>
+
+            <main>
+                <p>A very basic financial calculator: fill in some of the fields and press the icon on the field to be derived.</p>
+                <dl>
+                    <dt><img src="images/n.png"  /> Number of years</dt>
+                    <dd>Press the "months" or "quarters" links to change "n", "i" (optionally "PMT") to monthly or quarterly</dd>
+                    <dt><img src="images/i.png"  /> Annual Interest</dt>
+                    <dd>The annual interest rate as a number (5.2 for 5.2%)
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        Press the "months" or "quarters" links to change "n", "i" (optionally "PMT") to monthly or quarterly</dd>
+                    <dt><img src="images/PV.png"  /> Interest</dt>
+                    <dd>The Present Value; what you have today</dd>
+                    <dt><img src="images/PMT.png"  /> Payment Per Period</dt>
+                    <dd>(optional) Any regular payment that is made each period
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        Press the "months" or "quarters" links to change "n", "i" and "PMT" to monthly or quarterly</dd>
+                    <dt><img src="images/FV.png"  /> Future Value</dt>
+                    <dd>The value after compounding in the future</dd>
+                </dl>
+            </main>
+
+            <footer class="page-header">
+                <button type="button" class="return-btn btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-arrow-right"></span> Return
                 </button>
-                <input type="number" name="i" id="i" value="" min="1"
-                       placeholder="Annual Interest Rate">
-            </div>
-            <div class="form-group col-xs-12">
-                <button class="btn btn-default" id="pv-btn" tabindex="-1">
-                    <img src="images/PV.png"  />
-                </button>
-                <input type="number" name="pv" id="pv" value=""
-                       placeholder="Present Value">
-                <span id="pv_explain" style="display:none;"></span>
-            </div>
-            <div class="form-group col-xs-12">
-                <button class="btn btn-default" id="pmt-btn" tabindex="-1">
-                    <img src="images/PMT.png"  />
-                </button>
-                <input type="number" name="pmt" id="pmt" value=""
-                       placeholder="Payment Per Period">
-                <span id="pmt_explain" style="display:none;"></span>
-            </div>
-            <div class="form-group col-xs-12">
-                <button class="btn btn-default" id="fv-btn" tabindex="-1">
-                    <img src="images/FV.png"  />
-                </button>
-                <input type="number" name="fv" id="fv" value=""
-                       placeholder="Future Value">
-                <span id="fv_explain" style="display:none;"></span>
-            </div>
+            </footer>
 
-            <!-- buttons -->
+        </section>
 
-            <div class="form-group  col-xs-12">
-
-                    <input type="button" id="help-btn"  value="Help" tabindex="-1">
-                    <input type="button" id="reset-btn" value="Reset" tabindex="-1">
-
-            </div>
-
-    </main>
-
-    <p id="err_msg" style="color:red;display:none;">HHHHHHHHHHHHHHHHHHHHHHHHH</p>
-
-</section>
-
-<!--           -->
-<!-- Help Page -->
-<!--           -->
-<section data-role="page" id="help-page" style="display: none;">
-
-    <header class="page-header">
-        <button type="button" class="return-btn btn btn-default btn-sm">
-            <span class="glyphicon glyphicon-arrow-right"></span> Return
-        </button>
-    </header>
-
-    <main>
-        <p>A very basic financial calculator: fill in some of the fields and press the icon on the field to be derived.</p>
-        <dl>
-            <dt><img src="images/n.png"  /> Number of years</dt>
-            <dd>Press the "months" or "quarters" links to change "n", "i" (optionally "PMT") to monthly or quarterly</dd>
-            <dt><img src="images/i.png"  /> Annual Interest</dt>
-            <dd>The annual interest rate as a number (5.2 for 5.2%)
-                <br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                Press the "months" or "quarters" links to change "n", "i" (optionally "PMT") to monthly or quarterly</dd>
-            <dt><img src="images/PV.png"  /> Interest</dt>
-            <dd>The Present Value; what you have today</dd>
-            <dt><img src="images/PMT.png"  /> Payment Per Period</dt>
-            <dd>(optional) Any regular payment that is made each period
-                <br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                Press the "months" or "quarters" links to change "n", "i" and "PMT" to monthly or quarterly</dd>
-            <dt><img src="images/FV.png"  /> Future Value</dt>
-            <dd>The value after compounding in the future</dd>
-        </dl>
-
-    </main>
-
-    <footer class="page-header">
-        <button type="button" class="return-btn btn btn-default btn-sm">
-            <span class="glyphicon glyphicon-arrow-right"></span> Return
-        </button>
-    </footer>
-
-</section>
-
-</div> <!-- class="container" -->
+    </div> <!-- class="container" -->
 
 <!--                                       -->
 <!-- code driving the calculations follows -->
 <!--                                       -->
 
 <script>
-
-</script>
-
-<script>
     /**
      * Financial Formulas
      *
-     * citation
+     * citation for inclusion of PMT
      * http://www.getobjects.com/Components/Finance/TVM/formulas.html
      */
+
     function FV(PV, PMT, i, n, type) {
         var _i = i / 100;
 
@@ -201,9 +198,8 @@
         var denom      = Math.pow(1+_i,n) - 1;
         var frac       = PVplusFV / denom;
         var PVplusFrac = PV + frac;
-        var result     = PVplusFrac * (-_i / k);
 
-        return result;
+        return PVplusFrac * (-_i / k);
     }
     function N(i, PMT, PV, FV) {
         var _i = i / 100;
@@ -217,6 +213,7 @@
         return n;
     }
     function RATE(n, PV, FV, PMT) {
+        /* TODO: RATE when PMT is present */
         if (PMT > 0) {
             alert("RATE with PMT not implemented yet");
             return NaN;
@@ -228,6 +225,10 @@
 
 
     /* ================================================== */
+
+    /**
+     * button actions
+     */
 
     // Return button displays main-page
     $('.return-btn').click(function() {
@@ -243,7 +244,7 @@
         $('#err_msg').hide();
     });
 
-    // Reset button refreshes the whole package from the server ()
+    // Reset button refreshes the app to initial state
     $('#reset-btn').click(function() {
         $('#main-page').show();
         $('#help-page').hide();
@@ -253,11 +254,16 @@
 
     /* ================================================== */
 
+    /**
+     * numeric helper functions
+     */
+
     var roundedType = 1; /* default for rounded function */
 
     function rounded (num, type) {
-        /* type = 0 => don't round
-        *  defaults to 1           */
+        /* round to a certain number of decimal places based on 'dec' */
+
+        // type = 0 => don't round; defaults to 1
         type = (typeof type !== 'undefined') ?  type : 1;
         if (type == 0) return num;
 
@@ -266,12 +272,18 @@
     }
 
     function isNumeric(n) {
+        /* test if 'n' is numeric */
         return !isNaN(parseFloat(n)) && isFinite(n);
     }
 
     /* ================================================== */
 
+    /**
+     * helper functions specific to app operation
+     */
+
     function resetColors() {
+        /* set input colors to black */
         $('#n').css('color', 'black');
         $('#i').css('color', 'black');
         $('#pv').css('color', 'black');
@@ -281,6 +293,7 @@
     }
 
     function loadButtonVars() {
+        /* return the input values */
         var n = parseFloat(document.getElementById('n').value);
         var i = parseFloat(document.getElementById('i').value);
         var PV = parseFloat(document.getElementById('pv').value);
@@ -299,6 +312,7 @@
     }
 
     function explain(PV, FV, PMT) {
+        /* show 'deposit','withdrawal' */
         if (PV < 0) {
             $('#pv_explain').text("withdrawal");
             $('#pv_explain').show();
@@ -329,6 +343,7 @@
     }
 
     $('#months').click(function () {
+        /* switch from years to months */
         var vars = loadButtonVars();
         var n   = vars[0];
         var i   = vars[1];
@@ -345,9 +360,9 @@
             $('#err_msg').text("i not set");
             $('#err_msg').show()
         }
-
     });
     $('#quarters').click(function () {
+        /* switch from years to quarters */
         var vars = loadButtonVars();
         var n   = vars[0];
         var i   = vars[1];
@@ -364,10 +379,13 @@
             $('#err_msg').text("i not set");
             $('#err_msg').show()
         }
-
     });
 
     /* ================================================== */
+
+    /**
+     * onclick for each calculator icon
+     */
 
     $("#n-btn").click(function () {
         resetColors();
@@ -405,7 +423,6 @@
                 $('#i').css('color', 'red');
             }
         }
-
     });
 
     $("#pv-btn").click(function () {
@@ -445,8 +462,8 @@
             $('#pmt').css('color', 'red');
         }
         explain(PV, FV, pmt);
-
     });
+
     $("#fv-btn").click(function () {
         resetColors();
         var vars = loadButtonVars();
